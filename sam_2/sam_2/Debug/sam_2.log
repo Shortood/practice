@@ -1,0 +1,5 @@
+﻿  소스.cpp
+c:\users\woobi\onedrive\바탕 화면\c언어\sam_2\sam_2\소스.cpp(64): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\woobi\onedrive\바탕 화면\c언어\sam_2\sam_2\소스.cpp(65): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\woobi\onedrive\바탕 화면\c언어\sam_2\sam_2\소스.cpp(66): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  sam_2.vcxproj -> C:\Users\woobi\OneDrive\바탕 화면\C언어\sam_2\Debug\sam_2.exe
