@@ -61,7 +61,10 @@ int main()
                     Nowduck.push(make_pair(nextx, nexty));
                 }
                 else if (hosu[nextx][nexty] == 'X')
+                {
                     Nextduck.push(make_pair(nextx, nexty));
+                    hosu[nextx][nexty] = '.';
+                }
             }
             Nowduck.pop();
         }
