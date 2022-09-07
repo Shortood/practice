@@ -54,7 +54,7 @@ int main()
                     cout << cnt << endl;
                     return 0;
                 }
-                //
+                /*상하좌우 확인 물, 다음날 갈 위치 푸시*/
                 if (hosu[nextx][nexty] == '.' && check[nextx][nexty] == 0)
                 {
                     check[nextx][nexty] = 1;
@@ -62,10 +62,7 @@ int main()
                 }
                 else if (hosu[nextx][nexty] == 'X')
                     Nextduck.push(make_pair(nextx, nexty));
-                //
             }
-
-            /*상하좌우 확인 물, 다음날 갈 위치 푸시*/
             Nowduck.pop();
         }
 
@@ -87,6 +84,7 @@ int main()
         while (!Nextduck.empty())
         { //다음날 갈 백조 위치 오늘로 바꿔주기
             Nowduck.push(make_pair(Nextduck.front().first, Nextduck.front().second));
+            check[Nextduck.front().first][Nextduck.front().second] = 1;
             Nextduck.pop();
         }
         while (!Nextwater.empty())
@@ -95,7 +93,6 @@ int main()
             hosu[Nextwater.front().first][Nextwater.front().second] = '.'; //물로 바꾸기
             Nextwater.pop();
         }
-
         cnt++;
     }
 }
