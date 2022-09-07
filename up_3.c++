@@ -65,7 +65,7 @@ int main()
                     else if (hosu[nextx][nexty] == 'X')
                     {
                         Nextduck.push(make_pair(nextx, nexty));
-                        hosu[nextx][nexty] = '.';
+                        check[nextx][nexty] = 1;
                     }
                 }
             }
@@ -84,21 +84,24 @@ int main()
                 {
                     if (hosu[nextx][nexty] == 'X') //녹을 얼음 확인
                     {
+                        hosu[nextx][nexty] = '.';
                         Nextwater.push(make_pair(nextx, nexty)); //얼음 넣어주기
                     }
                 }
             }
             Nowwater.pop();
         }
+        Nowduck = Nextduck;
+        Nowwater = Nextwater;
         while (!Nextduck.empty())
         { //다음날 갈 백조 위치 오늘로 바꿔주기
-            Nowduck.push(make_pair(Nextduck.front().first, Nextduck.front().second));
-            check[Nextduck.front().first][Nextduck.front().second] = 1;
+            // Nowduck.push(make_pair(Nextduck.front().first, Nextduck.front().second));
+            // check[Nextduck.front().first][Nextduck.front().second] = 1;
             Nextduck.pop();
         }
         while (!Nextwater.empty())
         { //다음날 녹을 얼음 녹이기
-            Nowwater.push(make_pair(Nextwater.front().first, Nextwater.front().second));
+            // Nowwater.push(make_pair(Nextwater.front().first, Nextwater.front().second));
             hosu[Nextwater.front().first][Nextwater.front().second] = '.'; //물로 바꾸기
             Nextwater.pop();
         }
