@@ -31,7 +31,7 @@ int main()
                 duckcheck = 1;
                 check[i][j] = 1;
             }
-            else if (hosu[i][j] == '.')
+            else if (hosu[i][j] != 'X')
             { //물
                 Nowwater.push(make_pair(i, j));
             }
@@ -49,21 +49,24 @@ int main()
             {
                 int nextx = x + dx[i];
                 int nexty = y + dy[i];
-                if (hosu[nextx][nexty] == 'L' && check[nextx][nexty] == 0) //만나는지 확인
+                if (nextx >= 0 && nexty >= 0 && nextx < r && nexty < c)
                 {
-                    cout << cnt << endl;
-                    return 0;
-                }
-                /*상하좌우 확인 물, 다음날 갈 위치 푸시*/
-                if (hosu[nextx][nexty] == '.' && check[nextx][nexty] == 0)
-                {
-                    check[nextx][nexty] = 1;
-                    Nowduck.push(make_pair(nextx, nexty));
-                }
-                else if (hosu[nextx][nexty] == 'X')
-                {
-                    Nextduck.push(make_pair(nextx, nexty));
-                    hosu[nextx][nexty] = '.';
+                    if (hosu[nextx][nexty] == 'L' && check[nextx][nexty] == 0) //만나는지 확인
+                    {
+                        cout << cnt << endl;
+                        return 0;
+                    }
+                    /*상하좌우 확인 물, 다음날 갈 위치 푸시*/
+                    if (hosu[nextx][nexty] == '.' && check[nextx][nexty] == 0)
+                    {
+                        check[nextx][nexty] = 1;
+                        Nowduck.push(make_pair(nextx, nexty));
+                    }
+                    else if (hosu[nextx][nexty] == 'X')
+                    {
+                        Nextduck.push(make_pair(nextx, nexty));
+                        hosu[nextx][nexty] = '.';
+                    }
                 }
             }
             Nowduck.pop();
@@ -77,9 +80,12 @@ int main()
             {
                 int nextx = x + dx[i];
                 int nexty = y + dy[i];
-                if (hosu[nextx][nexty] == 'X') //녹을 얼음 확인
+                if (nextx >= 0 && nexty >= 0 && nextx < r && nexty < c)
                 {
-                    Nextwater.push(make_pair(nextx, nexty)); //얼음 넣어주기
+                    if (hosu[nextx][nexty] == 'X') //녹을 얼음 확인
+                    {
+                        Nextwater.push(make_pair(nextx, nexty)); //얼음 넣어주기
+                    }
                 }
             }
             Nowwater.pop();
