@@ -5,10 +5,12 @@ using namespace std;
 
 // 3197
 char hosu[1501][1501];
-int check[1501][1501];
+bool check[1501][1501];
+
 int main()
 {
     int r, c;
+    int duckcheck = 0;
     int dx[4] = {1, -1, 0, 0};
     int dy[4] = {0, 0, 1, -1};
     queue<pair<int, int>> Nowduck;   //백조 오늘 갈수 있는 길
@@ -23,31 +25,36 @@ int main()
         for (int j = 0; j < c; j++)
         {
             cin >> hosu[i][j];
-            if (hosu[i][j] == 'L') //넣으면서 다음날 물 푸시할 수 있는지 확인!!!!
+            if (hosu[i][j] == 'L' && duckcheck == 0)
+            {
                 Nowduck.push(make_pair(i, j));
-            else if (hosu[i][j] == '.') //물
+                duckcheck = 1;
+                check[i][j] = 1;
+            }
+            else if (hosu[i][j] == '.')
+            { //물
                 Nowwater.push(make_pair(i, j));
+            }
         }
     }
     int x, y;
-    int cnt = 0, fl = 0;
+    int cnt = 0;
     while (1) //될 때까지 반복
     {
-        cnt++;
         while (!Nowduck.empty()) //백조 만나는지 확인
         {
             x = Nowduck.front().first;
             y = Nowduck.front().second;
-            if (hosu[x - 1][y] == 'L' || hosu[x + 1][y] == 'L' || hosu[x][y + 1] == 'L' || hosu[x][y - 1] == 'L') //만나는지 확인
-            {
-                fl = 1;
-                break;
-            }
-            //상하좌우 확인 물, 다음날 갈 위치 푸시
-            for (int i = 0; i < 4; i++) //상하좌우 확인
+            for (int i = 0; i < 4; i++) //상하좌우 얼음 있는지 확인
             {
                 int nextx = x + dx[i];
                 int nexty = y + dy[i];
+                if (hosu[nextx][nexty] == 'L' && check[nextx][nexty] == 0) //만나는지 확인
+                {
+                    cout << cnt << endl;
+                    return 0;
+                }
+                //
                 if (hosu[nextx][nexty] == '.' && check[nextx][nexty] == 0)
                 {
                     check[nextx][nexty] = 1;
@@ -55,39 +62,40 @@ int main()
                 }
                 else if (hosu[nextx][nexty] == 'X')
                     Nextduck.push(make_pair(nextx, nexty));
+                //
             }
+
+            /*상하좌우 확인 물, 다음날 갈 위치 푸시*/
             Nowduck.pop();
         }
 
-        if (fl == 1) //만났다면
+        while (!Nowwater.empty()) //현재 물 확인
         {
-            cout << cnt << endl;
-            break;
-        }
-        else
-        {
-            //물 푸시 한거 팝 하면서 주변얼음 녹이기, 다음날 백조가 갈 위치 현재로 넣으면서 녹이기
-            while (!Nowwater.empty())
+            x = Nowwater.front().first;
+            y = Nowwater.front().second;
+            for (int i = 0; i < 4; i++) //상하좌우 얼음 있는지 확인
             {
-                x = Nowwater.front().first;
-                y = Nowwater.front().second;
-                for (int i = 0; i < 4; i++) //상하좌우 얼음 있는지 확인
+                int nextx = x + dx[i];
+                int nexty = y + dy[i];
+                if (hosu[nextx][nexty] == 'X') //녹을 얼음 확인
                 {
-                    int nextx = x + dx[i];
-                    int nexty = y + dy[i];
-                    if (hosu[nextx][nexty] == 'X') //녹을 얼음 녹이기
-                    {
-                        hosu[nextx][nexty] = '.'; //물로 만들기
-                    }
+                    Nextwater.push(make_pair(nextx, nexty)); //얼음 넣어주기
                 }
-                Nowwater.pop();
             }
-            while (!Nextduck.empty())
-            { //다음날 갈 백조 위치 오늘로 바꿔주기
-                Nowduck.push(make_pair(Nextduck.front().first, Nextduck.front().second));
-                Nextduck.pop();
-            }
-            //백조가 이미 간 물들은 그냥 바로 팝
+            Nowwater.pop();
         }
+        while (!Nextduck.empty())
+        { //다음날 갈 백조 위치 오늘로 바꿔주기
+            Nowduck.push(make_pair(Nextduck.front().first, Nextduck.front().second));
+            Nextduck.pop();
+        }
+        while (!Nextwater.empty())
+        { //다음날 녹을 얼음 녹이기
+            Nowwater.push(make_pair(Nextwater.front().first, Nextwater.front().second));
+            hosu[Nextwater.front().first][Nextwater.front().second] = '.'; //물로 바꾸기
+            Nextwater.pop();
+        }
+
+        cnt++;
     }
 }
