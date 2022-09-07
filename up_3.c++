@@ -62,7 +62,7 @@ int main()
                         check[nextx][nexty] = 1;
                         Nowduck.push(make_pair(nextx, nexty));
                     }
-                    else if (hosu[nextx][nexty] == 'X')
+                    else if (hosu[nextx][nexty] == 'X' && check[nextx][nexty] == 0)
                     {
                         Nextduck.push(make_pair(nextx, nexty));
                         check[nextx][nexty] = 1;
@@ -95,14 +95,10 @@ int main()
         Nowwater = Nextwater;
         while (!Nextduck.empty())
         { //다음날 갈 백조 위치 오늘로 바꿔주기
-            // Nowduck.push(make_pair(Nextduck.front().first, Nextduck.front().second));
-            // check[Nextduck.front().first][Nextduck.front().second] = 1;
             Nextduck.pop();
         }
         while (!Nextwater.empty())
         { //다음날 녹을 얼음 녹이기
-            // Nowwater.push(make_pair(Nextwater.front().first, Nextwater.front().second));
-            hosu[Nextwater.front().first][Nextwater.front().second] = '.'; //물로 바꾸기
             Nextwater.pop();
         }
         cnt++;
