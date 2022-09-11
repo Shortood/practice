@@ -1,21 +1,33 @@
 #include <iostream>
 
 using namespace std;
-int n, k;
+long long n, k;
 // 11401
 //(n, k) = (n-1, k-1) + (n-1, k)
-int bio(int n, int k)
+long long fac(int n, int k)
 {
-    // cout << "chek" << n << " " << k << endl;
-    if (k < 0 || k > n)
-        return 0;
-    else if (k == 1)
+    long long tmp = 1;
+    for (int i = n; i <= k; i++)
     {
-        cout << "chek" << n << endl;
-        return n;
+        tmp = tmp * i % 1000000007;
     }
+
+    return tmp;
+}
+
+long long pow(int x, int y)
+{
+
+    if (y == 1)
+        return x % 1000000007;
+    long long half;
+    half = pow(x, y / 2);
+    if (y % 2 == 1)
+        return (half * half % 1000000007) * x % 1000000007;
     else
-        return bio(n - 1, k - 1) % 1000000007 + bio(n - 1, k) % 1000000007;
+    {
+        return half * half % 1000000007;
+    }
 }
 
 int main()
@@ -23,15 +35,7 @@ int main()
     cin >> n >> k;
     if (n - k < k)
         k = n - k;
-    
-    cout << bio(n, k) << endl;
-    cout << "done" << endl;
-}
-/*
-5 2
-4 1   4 2  = 4 + 4 2 = 4 +6
-3 1 3 2 = 3 + 3 2 = 3+ 3
-2 1 2 2 = 2 + 2 2 = 2 + 1
-1 1 1 2 = 1 + 0
 
-*/
+    cout << (fac(n - k + 1, n) * pow(fac(1, k), 1000000007 - 2)) % 1000000007 << endl;
+    // cout << "done" << endl;
+}
