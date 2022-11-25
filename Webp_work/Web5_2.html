@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>5주차2번</title>
+        <script src="https://code.jquery.com/jQuery-3.6.0.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#but1").click(function () {
+                    $("#box").show().fadeOut('slow').slideDown("slow").fadeIn("slow");
+                });
+                $("#but2").click(function () {
+                    $("#box").hide("slow");
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <button id="but1">시작</button>
+        <button id="but2">정지</button>
+        <br><br><br>
+        <img id="box" src="1.PNG" style="display: none"></>
+    </body>
+</html>

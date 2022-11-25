@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>5주차 1번</title>
+        <style>
+            #box {
+                width: 90px;
+                height: 90px;
+                background: blue;
+            }
+        </style>
+        <script src="https://code.jquery.com/jQuery-3.6.0.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#but1").click(function () {
+                    $("#box").animate({
+                        width: 170,
+                    });
+                });
+                $("#but2").click(function () {
+                    $("#box").animate({
+                        width: 50,
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div id="box"></div>
+        <button id="but1">상자 확대</button>
+        <button id="but2">상자 축소</button>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>3주차 2번</title>
+
+</head>
+
+<body>
+    <script language="JavaScript">
+        var div1 = document.createElement("div");
+        var div2 = document.createElement("div");
+        var div1text = document.createTextNode("여긴 DIV1영역\n");
+        var div2text = document.createTextNode("여긴 DIV2영역");
+        var img = document.createElement("img");
+
+        document.body.append(div1);
+        document.body.append(div2);
+
+        div1.appendChild(div1text);
+        div2.appendChild(div2text);
+
+        div1.setAttribute("id", "id1");
+        div2.setAttribute("id", "id2");
+
+        div1.setAttribute("onclick","click1()");
+        div2.setAttribute("onclick","click2()");
+
+        document.body.appendChild(img);
+        img.setAttribute("src", "back.jpg");
+
+        function click1() {
+            var box1 = document.getElementById("id1");
+            box1.style.backgroundColor = "black";
+            box1.style.color="white";
+        }
+        function click2() {
+            var box2 = document.getElementById("id2");
+            var text=document.createTextNode("div2의 영역이죠");
+            box2.append(text);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>3주차 3번</title>
+
+    <script language="JavaScript">
+        function layer() {
+            if (map.style.visibility == "visible") {
+                var vi = document.getElementById("map");
+                vi.style.visibility = "hidden";
+            }
+        }
+        function layer2() {
+            if (map.style.visibility == "hidden") {
+                var vi2 = document.getElementById("map");
+                vi2.style.visibility = "visible";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <input type="radio" name="r1" value="hid" onclick="layer()" checked> 숨기기
+    <input type="radio" name="r1" value="nohid" onclick="layer2()"> 보이기
+    <div id="map" style="visibility:hidden;"><img src="Q3_map.jpg"></div>
+</body>
+
+</html>

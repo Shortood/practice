@@ -1,0 +1,410 @@
+컴퓨터알고리즘 실습
+실습 2주차
+전공 컴퓨터공학과
+학번 2019111990
+이름 강우빈
+2-1번 문제
+#include <iostream>
+using namespace std;
+template <typename itemType> //템플릿 형식 사용
+class Stack1{
+private:
+    itemType *stack;
+    int p;
+public:
+    Stack1(int max = 100)
+    {
+        stack = new itemType[max]; //배열 동적할당
+        p = 0; //p초기화
+    }
+    ~Stack1() { delete stack; } 
+    inline void push(int v)
+    {
+        stack[p++] = v; //값을 넣고 p증가
+    }
+    inline itemType pop()
+    {
+        return stack[--p]; //p값을 뺀 후 값 리턴
+    }
+    inline int empty()
+    {
+        return !p; //p가 0이면 비었다는 뜻
+    }
+};
+int main()
+{
+    char c; //받아오는 값을 저장
+    Stack1<int> acc(50); //클래스 객체 생성
+    int x; //받아오는 수 저장
+    while ((c = cin.get()) != '\n') //\n가 아닐동안 한 단어씩 받아옴
+    {
+        x = 0; //x초기화
+        while (c == ' ') //띄어쓰기라면 한 번더 받는다
+            cin.get(c);
+        if (c == '+') //+라면
+            x = acc.pop() + acc.pop();
+        if (c == '*')  //*라면
+            x = acc.pop() * acc.pop();
+
+        while (c >= '0' && c <= '9') //수를 전부 받을 때까지
+        {
+            x = 10 * x + (c - '0');
+            cin.get(c);
+        }
+        acc.push(x); //수 푸시
+    }
+    cout << acc.pop() << '\n';
+}
+
+결과
+itemType으로 정의된 변수를 입력 받는 값에 따라 달라지도록 템플릿을 사용했다.
+acc라는 스택 클래스 객체를 생성한다.
+Cin.get()을 통해 입력받은 문장을 하나씩 가져와 c변수에 넣는다.
+C가 수라면 수가 아닌 문자를 입력받을 때 까지 수를 입력받고 수를 x변수에 넣는다.
+X를 푸시한 후 계속해서 c를 받고 c가 문자일 경우 케이스에 따라 더하거나 곱한 값을 x에 저장한다.
+c가 \을 받는다면 문장이 끝났으므로 마지막으로 남아있는 수를 출력한다. 배열은 이용한 스택은 푸시, 팝이 모두 O(1)이므로 n개를 입력받을 때 알고리즘의 시간복잡도는 O(n)이다
+2번 문제
+#include <iostream>
+//20 30 * 45 3 / + 10 * 9 -
+using namespace std;
+
+template <typename itemType>
+class Stack2
+{
+public:
+    Stack2()
+    {// 헤드와 z포인터 초기화
+        head = NULL;
+        z = NULL;
+    }
+    ~Stack2()
+    {//헤드와 z포인터 초기화
+        head = NULL;
+        z = NULL;
+    }//이미 전부 팝 되었으므로 delete X
+    void push(int v) //푸시
+    {
+        if (empty()) //만약 비어있다면
+        { //헤드 추가
+            head = new node;
+            head->key = v;
+            head->next = NULL;
+        }
+        else//아니라면 새 노드 추가후 새 노드를 헤드로 해준다
+        {
+            z = new node;
+            z->key = v;
+            z->next = head;
+            head = z;
+        }
+    }
+
+    int pop() //팝
+    {
+        z = head; //z는 헤드
+        int tmp = z->key; //z의 키값을 보관
+        head = head->next; //헤드를 다음 노드로 옮겨준다
+        delete z; //노드 삭제
+        return tmp; //삭제한 노드 값 리턴
+    }
+    int empty() //head가 없다면 비어있다
+    {
+        return (head == NULL);
+    }
+
+private:
+    struct node
+    {
+        itemType key; //키값
+        struct node *next; //다음 노드를 가리킴
+    };
+    struct node *head, *z; //헤드 포인터와 임시 포인터
+};
+
+int main()
+{
+    char c; //받아오는 값을 저장
+    Stack2<int> acc;//클래스 객체 생성
+    int x;//받아오는 수 저장
+    while ((c = cin.get()) != '\n') //\n가 아닐동안 한 단어씩 받아옴
+    {
+        x = 0; //x 초기화
+        while (c == ' ')//띄어쓰기라면 한 번더 받는다
+            cin.get(c);
+        if (c == '+') //+라면
+            x = acc.pop() + acc.pop();
+        if (c == '*') //*라면
+            x = acc.pop() * acc.pop();
+        if (c == '-') //-라면
+        { //나중에 팝되는 수에서 먼저 팝되는 수를 빼야함
+            int first = acc.pop(), second = acc.pop();
+            x = second - first;
+        }
+        if (c == '/')
+        {//나중에 팝되는 수에서 먼저 팝되는 수를 나눠야함
+            int first = acc.pop(), second = acc.pop();
+            x = second / first;
+        }
+
+        while (c >= '0' && c <= '9') //수를 전부 받을 때까지
+        {
+            x = 10 * x + (c - '0');
+            cin.get(c);
+        }
+        acc.push(x); //수 푸시
+    }
+    cout << acc.pop() << '\n'; //결과 팝
+}
+
+결과
+링크드리스트를 이용해 스택을 구현하였다. 생성자에서는 헤드와 z포인터를 초기화해준다.
+소멸자에서도 헤드와 z포인터만 초기화해준다. 동적할당 시킨 메모리는 이미 팝을 하면서 모두 삭제되었기 때문에 delete해주지 않는다.
+푸시에서는 노드가 존재하지 않는다면 노드를 만든 후 바로 헤드가 노드를 가리키도록 한다. 이미 존재한다면 새 노드를 추가하고 새 노드를 헤드로 바꿔준다.
+팝에서는 z포인터를 이용해 헤드를 팝시켜준다. 메인에서 c가 -이거나 /일 경우 두 번쨰로 팝 한 수에서 첫번쨰로 팝한 수를 빼거나 나눠주어야 하므로 first와 second 변수를 사용한다.
+링크드리스트를 이용한 스택도 푸시, 팝은 o(1)이므로 n개를 입력받았을 때 O(n)이다.
+3번 문제
+#include <iostream>
+#include <time.h>
+#include <cstdlib>
+
+using namespace std;
+
+template <typename itemType>
+class Stack
+{
+public:
+    Stack()
+    { // 헤드와 z포인터 초기화
+        head = NULL;
+        z = NULL;
+    }
+    ~Stack()
+    { //헤드와 z포인터 초기화
+        if (head != NULL)
+        {
+            while (head != NULL)
+            {
+                z = head;
+                head = head->next;
+                delete z;
+            }
+        }
+        z = NULL;
+    }                //이미 전부 팝 되었으므로 delete X
+    void push(int v) //푸시
+    {
+        if (empty()) //만약 비어있다면
+        {            //헤드 추가
+            head = new node;
+            head->key = v;
+            head->next = NULL;
+        }
+        else //아니라면 새 노드 추가후 새 노드를 헤드로 해준다
+        {
+            z = new node;
+            z->key = v;
+            z->next = head;
+            head = z;
+        }
+    }
+    int gettop() //팝되는 값 리턴
+    {
+        return head->key;
+    }
+    int pop() //팝
+    {
+        z = head;          // z는 헤드
+        int tmp = z->key;  // z의 키값을 보관
+        head = head->next; //헤드를 다음 노드로 옮겨준다
+        delete z;          //노드 삭제
+        return tmp;        //삭제한 노드 값 리턴
+    }
+    int empty() // head가 없다면 비어있다
+    {
+        return (head == NULL);
+    }
+
+private:
+    struct node
+    {
+        itemType key;      //키값
+        struct node *next; //다음 노드를 가리킴
+    };
+    struct node *head, *z; //헤드 포인터와 임시 포인터
+};
+
+template <typename itemType>
+class Tree
+{
+private:
+    struct node
+    {
+        ~node() //메모리 초기화
+        {
+            if (this->left != NULL)
+                delete this->left;
+            if (this->right != NULL)
+                delete this->right;
+        }
+        itemType key;
+        struct node *left, *right;
+    };
+    struct node *head, *z;
+
+public:
+    Tree()
+    { //헤드 포인터 초기화
+        head = NULL;
+        z = NULL;
+    }
+    ~Tree()
+    { //메모리 초기화
+        if (this->head != NULL)
+            delete head;
+    }
+
+    void insertItem(int v) //트리 노드 추가
+    {
+        if (empty()) //노드가 하나도 없다면
+        {
+            head = new node; //헤드에 바로 만든다
+            head->left = NULL;
+            head->right = NULL;
+            head->key = v;
+        }
+        else
+            insert(head, v);
+    }
+
+    void insert(node *&tree, int v) //포인터 참조를 이용해 노드 추가
+    {
+
+        if (tree == NULL) //노드를 추가할 위치가 비어있다면
+        {
+            tree = new node; //추가한다
+            tree->key = v;
+            tree->left = NULL;
+            tree->right = NULL;
+        }
+
+        if (tree->key == v) //만약 이미 값이 있다면 함수는 중복되어선 안된다
+        {                   //추가하지 않는다
+        }
+        else if (v < tree->key) //들어올 값이 작다면 왼쪽에 노드 추가
+            insert(tree->left, v);
+        else //크다면 오른쪽에 노드 추가
+            insert(tree->right, v);
+    }
+
+    void getStack(Stack<int> &stk) //스택을 추가
+    {
+        if (!empty()) //노드가 하나라도 있다면
+            getStack(head, stk);
+    }
+
+    void getStack(node *tree, Stack<int> &stk) //참조를 통해 값을 바로 넣는다
+    {
+        if (tree != NULL) //재귀를 이용 큰 수부터 넣는다
+        {
+            getStack(tree->right, stk);
+            stk.push(tree->key);
+            getStack(tree->left, stk);
+        }
+    }
+
+    int empty()
+    {
+        return (head == NULL);
+    }
+};
+
+int main()
+{
+    int m, n, x;
+    srand(time(NULL));
+
+    Tree<int> a; // a집단
+    Tree<int> b; // b집단
+
+    cin >> m >> n;
+
+    for (int i = 0; i < m; i++)
+    {
+        x = rand() % m + 1; // 1부터 m까지 랜덤을 생성
+        cout << "insert a " << x << " ";
+        a.insertItem(x); // a리스트에 x추가
+    }
+    cout << endl;
+    for (int i = 0; i < n; i++)
+    {
+        x = rand() % n + 1;
+        cout << "insert b " << x << " ";
+        b.insertItem(x); // b 리스트에 추가
+    }
+    cout << endl;
+    Stack<int> stka; // a 집합을 보관하는 스택
+    Stack<int> stkb; // b 집합을 보관하는 스택
+    //합집합
+    a.getStack(stka);                      // a스택에 a트리의 값들을 푸시한다
+    b.getStack(stkb);                      // b스택에 b트리의 값들을 푸시한다
+    cout << "Union" << endl;               //합집합
+    while (!stka.empty() || !stkb.empty()) //두 스택에 값이 있을 동안
+    {
+        if (stka.gettop() == stkb.gettop()) //두 값이 같다면
+        {                                   //하나만 출력
+            cout << stka.pop() << " ";
+            stkb.pop();
+        }
+        else if (stka.gettop() < stkb.gettop()) // a보다 b값이 크다면
+            cout << stka.pop() << " ";          // a 값만 출력
+        else
+            cout << stkb.pop() << " "; // b값만 출력
+
+        if (stka.empty() && !stkb.empty()) // b 스택만 값이 남았을 때
+        {
+            while (!stkb.empty()) // b 스택 전부 팝
+            {
+                cout << stkb.pop() << " ";
+            }
+        }
+        else if (stkb.empty() && !stka.empty()) // a 스택만 값이 남았을때
+        {
+            while (!stka.empty()) // a 스택 전부 팝
+            {
+                cout << stka.pop() << " ";
+            }
+        }
+    }
+    cout << endl
+         << "inter" << endl; //교집합
+    a.getStack(stka);        // a스택에 a트리의 값들을 푸시한다
+    b.getStack(stkb);        // b스택에 b트리의 값들을 푸시한다
+    while (!stka.empty() && !stkb.empty()) //하나라도 비면 그만 둔다
+    {
+        if (stka.gettop() == stkb.gettop()) //두 값이 갔다면 교집합이므로 출력
+        {
+            cout << stka.pop() << " ";
+            stkb.pop();
+        }
+        else if (stka.gettop() > stkb.gettop()) //b스택의 값이 더 작다면
+        { //b 스택만 팝
+            stkb.pop();
+        }
+        else //아니면 a 스택만 팝
+            stka.pop();
+    }
+    cout << endl;
+}
+조건에서 m, n은 10보다 커야 하기 때문에 크기에 제한이 없어야 하기 때문에 배열이 아니라 이진 트리를 이용해 값을 받았다.
+들어오는 수가 현재 비교하는 노드의 값보다 크다면 오른쪽에 작다면 왼쪽에 노드를 추가했다. 크기에 따리 반으로 나눠질 수 있기 때문에 값을 비교할 때 훨씬 시간을 아낄 수 있다.
+먼저 랜덤으로 받는 값들을 각각 a, b트리에 입력받는다. 각각의 노드들을 크기 순서로 a, b스택에 푸시한다.
+팝하면서 a, b스택의 값들을 비교하며 두 값이 같으면 하나면 출력, a가 작다면 a만 팝을 해 출력하고 a스택의 값이 커지도록 한다.
+B가 작다면 반대로 한다. 만약 한 스택만 값이 남았다면 남은 값들을 모두 팝하며 출력해준다. 그 후 다시 a와 b 스택에 각 트리의 값들을 받고 같은 방식으로 팝을 하면 값을 비교한다.
+하지만 교집합은 값이 같을 때만 출력한다. 이진트리를 이용하기 때문에 첫번째 값을 넣을 때 log1 두번째 값을 넣을 떄 log2 … logn까지 더한다면 log1+log2+…logn = log(1*2*…n)= log(n!) n^n>n! 이다.
+즉 log(n!)<log(n^n)=nlogn이므로 최악일 경우 nlogn이다.
+결과
+a 집합과 b 집합에 값들이 들어간 후 합집합과 교집합의 값들이 출력된다.
+소감
+항상 stl을 이용해 사용했던 스택을 직접 만들어 사용하려다 보니 생각보다 헷갈리는 부분이 많았다.
+교집합과 합집합이라는 개념을 코드로 구현하려다 보니 생각해야하는 조건들이 많았고 트리 알고리즘을 다시 공부해야 해 시간이 오래 걸렸다.
+하지만 문제에서 a와 b가 집단인지 집합인지, 중복집합인지 중복이 되지 않는 집합인지 등 조건이 애매한 부분이 많아 좀 더 정확하게 설명을 해주었으면 좋겠다.

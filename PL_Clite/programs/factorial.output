@@ -1,0 +1,36 @@
+Begin parsing... programs/factorial.cpp
+
+Program (abstract syntax): 
+  Declarations: 
+    Declarations = {<n, int>, <i, int>, <f, int>} //n,i,f가 integer타입으로 선언
+  Block:  //프로그램 statement들은 block으로 표현
+    Assignment: //첫번쨰 Assignment
+      Variable: n
+      IntValue: 3
+    Assignment: 
+      Variable: i
+      IntValue: 1
+    Assignment: 
+      Variable: f
+      IntValue: 1
+    Loop: //while 문
+      Binary:  //조건
+        Operator: <
+        Variable: i
+        Variable: n
+      Block:  //body
+        Assignment: 
+          Variable: i
+          Binary: 
+            Operator: +
+            Variable: i
+            IntValue: 1
+        Assignment: 
+          Variable: f
+          Binary: 
+            Operator: *
+            Variable: f
+            Variable: i
+
+들여쓰기에 따라 부모, 자식 노드 구분
+같은 들여쓰기 = 같은 형제노드

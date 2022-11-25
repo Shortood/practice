@@ -1,0 +1,35 @@
+     Label    Opcode  Operand
+1000 test3    start   1000                                            
+1000 first    stl     retadr                                          
+1003          jsub    comp                                            
+1006          lda     min                                             
+1009          j       last                                            
+100c retadr   resw    1                                               
+100f comp     lda     zero                                            
+1012          sta     index                                           
+1015          ldx     index                                           
+1018          lda     table,x                                         
+101b stmin    sta     min                                             
+101e notst    lda     index                                           
+1021          add     three                                           
+1024          comp    count                                           
+1027          jlt     loop                                            
+102a          rsub                                                    
+102d loop     sta     index                                           
+1030          ldx     index                                           
+1033          lda     table,x                                         
+1036          comp    min                                             
+1039          jlt     stmin                                           
+103c          j       notst                                           
+103f table    word    12                                              
+1042          word    9                                               
+1045          word    8                                               
+1048          word    22                                              
+104b          word    6                                               
+104e count    word    15                                              
+1051 total    resw    1                                               
+1054 index    resw    1                                               
+1057 min      resw    1                                               
+105a zero     word    0                                               
+105d three    word    3                                               
+1060 last     end     first                                           

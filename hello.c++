@@ -1,15 +1,31 @@
-#include <iostream>
 #include <cstring>
+#include <iostream>
 
 using namespace std;
 
-int main()
-{
-    string hosu[100][100];
-    string hoho;
+int brutesearch(string p, string a) {
+    int i, j, M = p.length(), N = a.length();
+    int index[1000];
+    int cnt = 0;
+    for (i = 0, j = 0; i < N; i++, j++) {
+        if (a[i] != p[j]) {
+            i -= j - 1;
+            j = -1;
+        }
+        cout << j << " " << M << endl;
+        if (j == M) {
+            cout << "find" << endl;
+            index[cnt++] = j;
+            i -= j - 1;
+            j = -1;
+        }
+    }
+    return cnt;
+}
 
-    cin >> hoho;
-    if(hoho ==".") cout<<"fuck"<<endl;
+int main() {
+    string text = "A STRING SEARCHING EXAMPLE CONSISTING OF A GIVEN STING";
+    string pattern = "STING";
 
-    return 0;
+    cout << brutesearch(pattern, text) << endl;
 }
